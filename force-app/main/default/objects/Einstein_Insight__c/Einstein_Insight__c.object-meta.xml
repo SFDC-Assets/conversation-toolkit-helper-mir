@@ -149,16 +149,16 @@
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
-    <enableSearch>true</enableSearch>
+    <enableSearch>false</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>Conversation Helper</label>
+    <label>Einstein Insight</label>
     <nameField>
-        <label>Conversation Helper Name</label>
+        <label>Einstein Insight Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Conversation Helpers</pluralLabel>
+    <pluralLabel>Einstein Insights</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

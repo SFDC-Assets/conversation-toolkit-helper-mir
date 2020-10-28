@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Recommended_Action__c</fullName>
+    <fullName>Chat_Transcript__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <label>Recommended Action</label>
-    <referenceTo>Recommendation</referenceTo>
-    <relationshipLabel>Conversation Helpers</relationshipLabel>
-    <relationshipName>Conversation_Helpers</relationshipName>
+    <label>Chat Transcript</label>
+    <referenceTo>LiveChatTranscript</referenceTo>
+    <relationshipLabel>Einstein Insights</relationshipLabel>
+    <relationshipName>Einstein_Insights</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
