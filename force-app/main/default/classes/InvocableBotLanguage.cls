@@ -50,11 +50,11 @@ public with sharing class InvocableBotLanguage {
         outputParameter.dDetectedSentimentConfidence = 0.0;
         outputParameter.iAggregatedSentiment = 0; 
         
-        // Find undetected utterances from this session
-        List<Utterance_Log__c> undetectedUtterances = [SELECT CurrentUtterance__c, CreatedDate 
-                                                       FROM Utterance_Log__c
-                                                       WHERE Live_Chat_Transcript__c = :sLiveChatTranscriptId
-                                                       ORDER BY CreatedDate Desc];
+        // // Find undetected utterances from this session
+        // List<Utterance_Log__c> undetectedUtterances = [SELECT CurrentUtterance__c, CreatedDate 
+        //                                                FROM Utterance_Log__c
+        //                                                WHERE Live_Chat_Transcript__c = :sLiveChatTranscriptId
+        //                                                ORDER BY CreatedDate Desc];
  
         System.debug('Inputs were [' + sCurrentUtterance + '], transcript id: ' + sLiveChatTranscriptId +  + ' confidence threshold: ' + dConfidenceThreshold + ' aggregated sentiment: ' + iAggregatedSentiment);
         // get settings
@@ -84,7 +84,7 @@ public with sharing class InvocableBotLanguage {
         } else if (utteranceLog.Sentiment__c == 'Negative'){
             iAggregatedSentiment--;
         }
-        utteranceLog.LiveTranscript_c__c = sLiveChatTranscriptId;
+        utteranceLog.LiveChatTranscript__c = sLiveChatTranscriptId;
         utteranceLog.Utterance_Source__c = 'Customer';  // should never be the bot
 
         // utteranceLog.Aggregated_Sentiment__c = iAggregatedSentiment;
