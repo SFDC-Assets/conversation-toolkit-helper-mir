@@ -27,12 +27,17 @@ public with sharing class ConversationToolkitEinsteinLanguage {
     @AuraEnabled
     public static Integer generateEinsteinInsights(String transcriptText, String channelType, String recordId, Integer aggregatedSentiment){
         System.debug('Inputs were ' + transcriptText + ' ' + channelType + ' ' + recordId + ' ' + aggregatedSentiment);
+        // get settings
+        ConversationTKEinsteinConfig__c einsteinModelSettings = ConversationTKEinsteinConfig__c.getValues('Default');
+        System.debug(einsteinModelSettings);
+        String intentModel = (einsteinModelSettings != null && einsteinModelSettings.Intent_Model_Id__c != null) ? einsteinModelSettings.Intent_Model_Id__c : 'O5F46QIAFVWW3EGWLCZCNVIVIU';
+        String sentimentModel = (einsteinModelSettings != null && einsteinModelSettings.Sentiment_Model_Id_1__c != null) ? einsteinModelSettings.Sentiment_Model_Id_1__c : 'CommunitySentiment';
         //Get Einstein Intent
         einsteinplay.Einstein_PredictionService serviceIntent = new einsteinplay.Einstein_PredictionService(einsteinplay.Einstein_PredictionService.Types.INTENT);
-        einsteinplay.Einstein_PredictionResult predictionIntent = serviceIntent.predictIntent('O5F46QIAFVWW3EGWLCZCNVIVIU', transcriptText, 3, '');
+        einsteinplay.Einstein_PredictionResult predictionIntent = serviceIntent.predictIntent(intentModel, transcriptText, 3, '');
         //Get Einstein Sentiment
         einsteinplay.Einstein_PredictionService serviceSentiment = new einsteinplay.Einstein_PredictionService(einsteinplay.Einstein_PredictionService.Types.SENTIMENT);
-        einsteinplay.Einstein_PredictionResult predictionSentiment = serviceSentiment.predictSentiment('CommunitySentiment', transcriptText, 3, '');
+        einsteinplay.Einstein_PredictionResult predictionSentiment = serviceSentiment.predictSentiment(sentimentModel, transcriptText, 3, '');
         //Save data to Einstein Insight object
         Einstein_Insight__c insight = new Einstein_Insight__c();
         insight.Name = transcriptText;

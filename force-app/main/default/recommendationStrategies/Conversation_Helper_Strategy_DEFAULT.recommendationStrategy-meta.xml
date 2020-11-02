@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecommendationStrategy xmlns="http://soap.sforce.com/2006/04/metadata">
+    <filter>
+        <childNode>All_Recommendations</childNode>
+        <label>Filter to matched Recommendation</label>
+        <name>Filter_to_matched_Recommendation</name>
+        <expression>Id = $Request.ConversationKey &amp;&amp; $Request.ConversationKey != &apos;&apos;</expression>
+    </filter>
+    <label>*Conversation Helper Strategy DEFAULT</label>
+    <mutuallyExclusive>
+        <childNode>Filter_to_matched_Recommendation</childNode>
+        <childNode>Remote_Diagnostics</childNode>
+        <label>Pinned Recommendations</label>
+        <name>Pinned_Recommendations</name>
+    </mutuallyExclusive>
+    <recommendationLoad>
+        <label>Remote Diagnostics</label>
+        <name>Remote_Diagnostics</name>
+        <condition>
+            <field>Name</field>
+            <operator>EQUALS</operator>
+            <value>
+                <type>TEXT</type>
+                <value>Simple1</value>
+            </value>
+        </condition>
+        <conditionLogic>and</conditionLogic>
+        <object>Recommendation</object>
+    </recommendationLoad>
+    <recommendationLoad>
+        <label>All Recommendations</label>
+        <name>All_Recommendations</name>
+        <condition>
+            <field>Name</field>
+            <operator>NOT_EQUALS</operator>
+            <value>
+                <type>TEXT</type>
+                <value/>
+            </value>
+        </condition>
+        <conditionLogic>and</conditionLogic>
+        <object>Recommendation</object>
+    </recommendationLoad>
+    <union>
+        <childNode>Pinned_Recommendations</childNode>
+        <label>Output</label>
+        <name>Output_ed33402913c044519873a4e33b471371</name>
+    </union>
+</RecommendationStrategy>
