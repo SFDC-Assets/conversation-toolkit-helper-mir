@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>LiveChatTranscript__c</fullName>
+    <fullName>LiveChatTranscript_custom__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <externalId>false</externalId>
-    <label>LiveChatTranscript</label>
+    <label>LiveChatTranscript__c</label>
     <referenceTo>LiveChatTranscript__c</referenceTo>
     <relationshipLabel>Bot Utterances</relationshipLabel>
     <relationshipName>Bot_Utterances</relationshipName>
