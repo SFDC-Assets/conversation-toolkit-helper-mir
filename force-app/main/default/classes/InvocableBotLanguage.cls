@@ -26,10 +26,30 @@ public with sharing class InvocableBotLanguage {
         public Double dDetectedSentimentConfidence;
         @InvocableVariable(required=false)
         public Integer iAggregatedSentiment;
+
+        @InvocableVariable(required=false)
+        public Boolean bHasPredictions;
     }
 
     @InvocableMethod(label='Einstein Intent and Sentiment Logger and Router')
     public static List<handleOutput> handleIntentDetectionFailure(List<HandleInput> inputParameters) {
+        // Create default output values
+        List<HandleOutput> outputParameters = new List<HandleOutput>();
+        HandleOutput outputParameter = new HandleOutput();
+        outputParameter.sDetectedIntent = ''; // nothing
+        outputParameter.dDetectedIntentConfidence = 0.0; 
+        outputParameter.sDetectedSentiment = 'Neutral'; 
+        outputParameter.dDetectedSentimentConfidence = 0.0;
+        outputParameter.iAggregatedSentiment = 0; 
+        outputParameter.bHasPredictions = false; // until we run, assume this is blank text
+        
+        // check for important blanks or nulls.
+        // bail out if they aren't present
+        if (inputParameters == null || inputParameters[0].sCurrentUtterance == null || String.isBlank(inputParameters[0].sCurrentUtterance) ){
+            outputParameters.add(outputParameter);       
+            return outputParameters;
+        }
+
         String sCurrentUtterance = inputParameters[0].sCurrentUtterance;
         String sLiveChatTranscriptId = inputParameters[0].sLiveChatTranscriptId;
         Double dConfidenceThreshold = inputParameters[0].dConfidenceThreshold;
@@ -39,22 +59,12 @@ public with sharing class InvocableBotLanguage {
         }
         if (iAggregatedSentiment == null){
             iAggregatedSentiment = 0;
-        }
+        } 
+        outputParameter.bHasPredictions = true; 
  
-        // Create default output values
-        List<HandleOutput> outputParameters = new List<HandleOutput>();
-        HandleOutput outputParameter = new HandleOutput();
-        outputParameter.sDetectedIntent = ''; // nothing
-        outputParameter.dDetectedIntentConfidence = 0.0; 
-        outputParameter.sDetectedSentiment = 'Neutral'; 
-        outputParameter.dDetectedSentimentConfidence = 0.0;
-        outputParameter.iAggregatedSentiment = 0; 
         
-        // // Find undetected utterances from this session
-        // List<Utterance_Log__c> undetectedUtterances = [SELECT CurrentUtterance__c, CreatedDate 
-        //                                                FROM Utterance_Log__c
-        //                                                WHERE Live_Chat_Transcript__c = :sLiveChatTranscriptId
-        //                                                ORDER BY CreatedDate Desc];
+        
+        
  
         System.debug('Inputs were [' + sCurrentUtterance + '], transcript id: ' + sLiveChatTranscriptId +  + ' confidence threshold: ' + dConfidenceThreshold + ' aggregated sentiment: ' + iAggregatedSentiment);
         // get settings
