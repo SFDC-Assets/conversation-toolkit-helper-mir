@@ -31,6 +31,7 @@ public with sharing class InvocableBotLanguage {
         public Boolean bHasPredictions;
     }
 
+    // This is massively monolithic and needs refactoring
     @InvocableMethod(label='Einstein Intent and Sentiment Logger and Router')
     public static List<handleOutput> handleIntentDetectionFailure(List<HandleInput> inputParameters) {
         // Create default output values
@@ -99,8 +100,24 @@ public with sharing class InvocableBotLanguage {
             utteranceLog.Utterance_Source__c = 'Customer';  // should never be the bot
 
             // utteranceLog.Aggregated_Sentiment__c = iAggregatedSentiment;
+
+            // also log to Einstein_Insight__c
+            Einstein_Insight__c insight = new Einstein_Insight__c();
+            insight.Chat_Transcript__c = sLiveChatTranscriptId;
+            insight.Name = sCurrentUtterance;
+            insight.Intent__c = predictionIntent.probabilities[0].label;
+            insight.Intent_Confidence__c = predictionIntent.probabilities[0].probability;
+            System.debug('Intent is '+ insight.Intent__c + ' ' + insight.Intent_Confidence__c);
+            insight.Sentiment__c = predictionSentiment.probabilities[0].label;
+            insight.Sentiment_Confidence__c = predictionSentiment.probabilities[0].probability;
+            System.debug('Sentiment is ' + insight.Sentiment__c + ' ' + insight.Sentiment_Confidence__c);
+            
+            insight.Aggregated_Sentiment__c = iAggregatedSentiment;
+            
+            
             System.debug('Aggregated Sentiment is ' + iAggregatedSentiment);
             
+            // output params
             outputParameter.dDetectedIntentConfidence = utteranceLog.Intent_Confidence_1__c; 
             if (outputParameter.dDetectedIntentConfidence >= dConfidenceThreshold){
                 outputParameter.sDetectedIntent = utteranceLog.Intent_1__c;
@@ -111,7 +128,19 @@ public with sharing class InvocableBotLanguage {
             }
             outputParameter.iAggregatedSentiment = iAggregatedSentiment;
 
+            // Lagniappe--link to the case if it's possible
+            try{
+                LiveChatTranscript lct = [SELECT Id, Name, CaseID, Channel_Name__c, CreatedDate FROM LiveChatTranscript WHERE ID = :sLiveChatTranscriptId];
+                if (lct != null && lct.CaseId != null){
+                    utteranceLog.Case__c = lct.CaseId;
+                    insight.Case__c = lct.CaseId;
+                }
+            } catch (Exception e1){
+                //TODO
+                System.debug(e1.getStackTraceString());
+            }
             insert utteranceLog;
+            insert insight;
         } catch(Exception ex){
             System.debug(ex.getStackTraceString());
         }

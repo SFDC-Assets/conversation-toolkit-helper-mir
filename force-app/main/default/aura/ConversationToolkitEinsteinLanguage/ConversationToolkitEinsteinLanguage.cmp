@@ -1,4 +1,4 @@
-<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="ConversationToolkitNBAController">
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="ConversationToolkitEinsteinLanguage">
     <!-- init -->
     <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
     
@@ -20,7 +20,41 @@
     <aura:attribute name="payload" type="String" default=""/>
     <aura:attribute name="record" type="Object"/>
     <aura:attribute name="helperList" type="List" />
+    <aura:attribute name="einsteinInsight" type="Object" />
+    <aura:attribute name="aggregatedSentiment" type="Integer" />
+    <aura:attribute name="sentimentTrend" type="String" />
     
     <!-- get record data -->
     <force:recordData recordId="{!v.recordId}" layoutType="FULL" targetFields="{!v.record}"/>
+    
+    <lightning:card>
+        <aura:set attribute="title">
+            <lightning:icon iconName="utility:connected_apps" size="small"/>
+            Einstein Language Intent and Sentiment
+        </aura:set>
+        
+        <aura:set attribute="footer">
+            Aggregated Sentiment: {!v.aggregatedSentiment} 
+        </aura:set>
+        
+        <div class="c-container">
+            <lightning:layout>
+                <lightning:layoutItem padding="around-small">
+                    <div class="custom-box">{!v.einsteinInsight.Intent__c} </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small">
+                    <div class="custom-box">{!v.einsteinInsight.Intent_Confidence__c} </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small">
+                    <div class="custom-box">
+                        {!v.einsteinInsight.Sentiment__c} 
+                        <lightning:dynamicIcon type="trend" option="{!v.sentimentTrend}" alternativeText="{!v.sentimentTrend}" />
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small">
+                    <div class="custom-box">{!v.einsteinInsight.Sentiment_Confidence__c} </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+    </lightning:card>
 </aura:component>

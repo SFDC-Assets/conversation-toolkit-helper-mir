@@ -23,9 +23,32 @@ public with sharing class ConversationToolkitEinsteinLanguage {
             update eiList;
         }
     }
+
+    @AuraEnabled
+    public static Einstein_Insight__c retrieveInsightOnHandoff(String channelType, String recordId){
+        System.debug('Retrieving Last Einstein Insight ' + channelType + recordId);
+
+        Einstein_Insight__c eiRecord = new Einstein_Insight__c();
+        if (channelType == 'Voice'){
+            eiRecord = [SELECT ID, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Voice_Call__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
+        } else if (channelType == 'Chat'){
+            eiRecord = [SELECT ID, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Chat_Transcript__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
+        } else if (channelType == 'Messaging'){
+            eiRecord = [SELECT ID, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Messaging_Session__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
+        }
+        if(eiRecord == null){
+            eiRecord = new Einstein_Insight__c();
+            eiRecord.Aggregated_Sentiment__c = 0;
+            eiRecord.Sentiment__c = 'neutral'; // no intent
+            eiRecord.Sentiment_Confidence__c = 0.0;
+            eiRecord.Intent__c = ''; // no intent
+            eiRecord.Intent_Confidence__c = 0.0;
+        }
+        return eiRecord;
+    }
     
     @AuraEnabled
-    public static Integer generateEinsteinInsights(String transcriptText, String channelType, String recordId, Integer aggregatedSentiment){
+    public static Einstein_Insight__c generateEinsteinInsights(String transcriptText, String channelType, String recordId, Integer aggregatedSentiment){
         System.debug('Inputs were ' + transcriptText + ' ' + channelType + ' ' + recordId + ' ' + aggregatedSentiment);
         // get settings
         ConversationTKEinsteinConfig__c einsteinModelSettings = ConversationTKEinsteinConfig__c.getValues('Default');
@@ -63,6 +86,7 @@ public with sharing class ConversationToolkitEinsteinLanguage {
             insight.Messaging_Session__c = recordId;
         }
         insert insight;
-        return aggregatedSentiment;
+        
+        return insight;
     }
 }
