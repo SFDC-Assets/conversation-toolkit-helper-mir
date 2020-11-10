@@ -1,0 +1,6 @@
+SELECT Intent__c label, Count(Name) value FROM Einstein_Insight__c WHERE  Chat_Transcript__c = :recordId WITH SECURITY_ENFORCED GROUP BY Intent__c LIMIT 10
+
+SELECT Intent__c label, Count(Name) value FROM Einstein_Insight__c  GROUP BY Intent__c LIMIT 10
+
+SELECT Sentiment__c label, Count(Name) value FROM Einstein_Insight__c  GROUP BY Sentiment__c LIMIT 10
+
