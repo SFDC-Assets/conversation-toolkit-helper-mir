@@ -119,7 +119,7 @@
         }
         cmp.set('v.aggregatedSentiment', aggregatedSentiment);
         cmp.set('v.sentimentTrend', sentimentTrend);
-        console.log('retVal of action is ' + insightRecord);
+        console.log('retVal of action is ' + JSON.stringify(insightRecord) + ' sentimentTrend = ' + sentimentTrend + ' and aggregatedSentiment = ' + aggregatedSentiment);
     },
     
     updateEinsteinInsights: function(cmp, channelType, recordId){
@@ -141,9 +141,17 @@
         action.setCallback(this, function(res){
             let state = res.getState();
             let retVal = res.getReturnValue();
+            this.setInsightAttributes(cmp, retVal);
             
-            console.log('State off action is ' + state);           
+            console.log('State off action is ' + state + '  returnValue was ' + JSON.stringify(retVal));           
         })        
         $A.enqueueAction(action);
+    }, 
+
+    initIntentRecord: function(cmp, recordId){
+        if(recordId != null && recordId.startsWith('570')){
+            console.log('linking any bot language insight to chat session...');
+            this.retrieveIntentOnHandoff(cmp, 'Chat', recordId);
+        }
     }
 })

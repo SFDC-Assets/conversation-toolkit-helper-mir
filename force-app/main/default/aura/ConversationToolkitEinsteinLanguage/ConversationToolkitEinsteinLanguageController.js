@@ -1,6 +1,8 @@
 ({
     doInit: function(cmp, event, helper) {
         helper.subscribeToVoiceToolkit(cmp);
+        var recordId = cmp.get('v.recordId');
+        helper.initIntentRecord(cmp, recordId);
     },
     
     onDestroy: function(cmp, event, helper) {

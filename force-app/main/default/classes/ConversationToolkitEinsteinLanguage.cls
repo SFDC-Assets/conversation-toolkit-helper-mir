@@ -30,11 +30,11 @@ public with sharing class ConversationToolkitEinsteinLanguage {
 
         Einstein_Insight__c eiRecord = new Einstein_Insight__c();
         if (channelType == 'Voice'){
-            eiRecord = [SELECT ID, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Voice_Call__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
+            eiRecord = [SELECT ID, Intent__c, Intent_Confidence__c, Sentiment__c, Sentiment_Confidence__c, Aggregated_Sentiment__c, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Voice_Call__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
         } else if (channelType == 'Chat'){
-            eiRecord = [SELECT ID, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Chat_Transcript__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
+            eiRecord = [SELECT ID, Intent__c, Intent_Confidence__c, Sentiment__c, Sentiment_Confidence__c, Aggregated_Sentiment__c, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Chat_Transcript__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
         } else if (channelType == 'Messaging'){
-            eiRecord = [SELECT ID, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Messaging_Session__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
+            eiRecord = [SELECT ID, Intent__c, Intent_Confidence__c, Sentiment__c, Sentiment_Confidence__c, Aggregated_Sentiment__c, Position__c, CreatedDate FROM Einstein_Insight__c WHERE Messaging_Session__c =:recordId ORDER BY CreatedDate DESC LIMIT 1];
         }
         if(eiRecord == null){
             eiRecord = new Einstein_Insight__c();
