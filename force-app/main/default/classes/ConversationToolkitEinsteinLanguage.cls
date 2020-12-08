@@ -49,7 +49,7 @@ public with sharing class ConversationToolkitEinsteinLanguage {
             eiRecord.Aggregated_Sentiment__c = 0;
             eiRecord.Sentiment__c = 'neutral'; // no intent
             eiRecord.Sentiment_Confidence__c = 0.0;
-            eiRecord.Intent__c = ''; // no intent
+            eiRecord.Intent__c = 'Unclassified meaning'; // no intent
             eiRecord.Intent_Confidence__c = 0.0;
         }
         
